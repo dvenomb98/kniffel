@@ -94,7 +94,7 @@ export const gameReducer = (state: GameType, action: Action) => {
 							: player_one,
 					player_two:
 						playerTurn === PlayerTurn.PLAYER_TWO
-							? { ...player_two, stats: { ...player_one.stats, upper_layer: updatedLayer } }
+							? { ...player_two, stats: { ...player_two.stats, upper_layer: updatedLayer } }
 							: player_two,
 				};
 			} else if (layer === "bottom_layer") {
@@ -113,7 +113,7 @@ export const gameReducer = (state: GameType, action: Action) => {
 							: player_one,
 					player_two:
 						playerTurn === PlayerTurn.PLAYER_TWO
-							? { ...player_two, stats: { ...player_one.stats, bottom_layer: updatedLayer } }
+							? { ...player_two, stats: { ...player_two.stats, bottom_layer: updatedLayer } }
 							: player_two,
 				};
 			}
