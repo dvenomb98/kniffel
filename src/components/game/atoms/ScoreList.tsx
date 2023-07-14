@@ -25,6 +25,8 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
 	const { possibleScores, rollsLeft } = gameValues;
 	const isCancelled = value === "canceled";
 
+	
+
 	const addScore = useMemo(
 		() => canAddScore(object_key, possibleScores, layer, currentPlayer),
 		[possibleScores, currentPlayer]
@@ -36,6 +38,7 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
 			: possibleScores.bottom_layer[object_key as BottomLayerKeys];
 	}, [possibleScores, currentPlayer, layer]);
 
+	// FIX CAN CANCEL SCORE DOESNT DISPLAY
 	const canCancelScore = !addScore && !correctLayerScoreValue && !rollsLeft && !value;
 
 	const handleAddScore = () => {

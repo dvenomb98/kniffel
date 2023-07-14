@@ -28,8 +28,6 @@ const Game: FC = () => {
 		}
 	}, [gameState])
 
-	console.log(gameValues)
-
 
 	if (gameState === GameState.FINISHED) {
 		return (

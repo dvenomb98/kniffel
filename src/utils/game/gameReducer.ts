@@ -131,8 +131,8 @@ export const gameReducer = (state: GameType, action: Action) => {
 
 			return {
 				...state,
-				player_one: { ...player_1, finalScore: player_one_final_score },
-				player_two: { ...player_2, finalScore: player_two_final_score },
+				player_one: { ...player_1, final_score: player_one_final_score },
+				player_two: { ...player_2, final_score: player_two_final_score },
 			};
 
 		default:
