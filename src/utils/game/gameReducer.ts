@@ -7,8 +7,9 @@ import {
 	PossibleValue,
 	UpperLayerKeys,
 } from "@/types/game/types";
-import { calculatePossibleScores, generateNewDie } from "./gameUtils";
+import { calculateFinalScore, calculatePossibleScores, generateNewDie } from "./gameUtils";
 import { initialDice, initialScore } from "@/config/game/config";
+import { AcceptedPlugin } from "postcss";
 
 // Define action types
 export enum ActionTypes {
@@ -16,6 +17,7 @@ export enum ActionTypes {
 	SWITCH_PLAYER = "SWITCH_PLAYER",
 	HOLD_DIE = "HOLD_DIE",
 	SET_SCORE = "SET_SCORE",
+	CALCULATE_SCORE = "CALCULATE_SCORE",
 }
 
 export type Action =
@@ -30,7 +32,7 @@ export type Action =
 				shouldCancel: boolean;
 			};
 	  }
-	
+	| { type: ActionTypes.CALCULATE_SCORE };
 
 export const gameReducer = (state: GameType, action: Action) => {
 	switch (action.type) {
@@ -41,7 +43,6 @@ export const gameReducer = (state: GameType, action: Action) => {
 
 			const newBoardValues = state.boardValues.map((die) => (die.isHeld ? die : generateNewDie()));
 			const possibleScores = calculatePossibleScores(newBoardValues);
-			
 
 			return {
 				...state,
@@ -71,7 +72,7 @@ export const gameReducer = (state: GameType, action: Action) => {
 				rollsLeft: 3,
 				possibleScores: initialScore,
 				round: newRound,
-				gameState: newGameState
+				gameState: newGameState,
 			};
 
 			const playerToUpdate = playerTurn === PlayerTurn.PLAYER_ONE ? player_one : player_two;
@@ -120,7 +121,20 @@ export const gameReducer = (state: GameType, action: Action) => {
 
 			return state;
 
-		
+		case ActionTypes.CALCULATE_SCORE:
+			const { gameState, player_one: player_1, player_two: player_2 } = state;
+
+			if (gameState !== GameState.FINISHED) return state;
+
+			const player_one_final_score = calculateFinalScore(player_1.stats);
+			const player_two_final_score = calculateFinalScore(player_2.stats);
+
+			return {
+				...state,
+				player_one: { ...player_1, finalScore: player_one_final_score },
+				player_two: { ...player_2, finalScore: player_two_final_score },
+			};
+
 		default:
 			return state;
 	}

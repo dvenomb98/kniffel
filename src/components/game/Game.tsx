@@ -19,7 +19,14 @@ const GameMainLayout: FC<GameMainLayoutProps> = ({ children }) => (
 
 const Game: FC = () => {
 	const { gameValues, dispatch, currentPlayer } = useGameContext();
-	const { gameState } = gameValues;
+	const { gameState, rollsLeft } = gameValues;
+
+
+	useEffect(() => {
+		if(gameState === GameState.FINISHED) {
+			dispatch({type: ActionTypes.CALCULATE_SCORE})
+		}
+	}, [gameState])
 
 	console.log(gameValues)
 
@@ -36,6 +43,7 @@ const Game: FC = () => {
 			<GameMainLayout>
 				{/* GAME BOARD */}
 				<GameLayout>
+					<div className="flex items-center justify-between w-full">
 					<Button
 						onClick={() => dispatch({ type: ActionTypes.ROLL_DICE })}
 						variant="outlined"
@@ -45,7 +53,10 @@ const Game: FC = () => {
 					>
 						Roll dices
 					</Button>
+					<p className="text-primary-gray">Rolls left: <span className="text-secondary-light">{rollsLeft}</span></p>
+					</div>
 					<Board />
+					
 				</GameLayout>
 				{/* GAME STATISTICS */}
 				<StatsBar currentPlayer={currentPlayer} />

@@ -10,6 +10,7 @@ interface UpperLayerScoreProps {
 }
 
 const UpperLayerScore: FC<UpperLayerScoreProps> = ({currentPlayer}) => {
+	
 	const { one_er, two_er, three_er, for_er, five_er, six_er } = currentPlayer.stats.upper_layer;
 
 

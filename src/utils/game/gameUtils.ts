@@ -121,18 +121,20 @@ export const calculatePossibleScores = (dice: Die[]) => {
 	return { upper_layer, bottom_layer };
 };
 
-// export const calculateFinalScore = (playerStats: GameStats) => {
-// 	let totalScore = 0;
+export const calculateFinalScore = (playerStats: GameStats) => {
+	let totalScore = 0;
 	
-// 	for (const layer in playerStats) {
-// 	  if (playerStats.hasOwnProperty(layer)) {
-// 		const stats = playerStats[layer];
-// 		for (const scoreType in stats) {
-// 		  if (stats.hasOwnProperty(scoreType) && stats[scoreType] !== "canceled") {
-// 			totalScore += stats[scoreType];
-// 		  }
-// 		}
-// 	  }
-// 	}
-// 	return totalScore;
+	for (const layer in playerStats) {
+	  if (playerStats.hasOwnProperty(layer)) {
+		const stats = playerStats[layer];
+		for (const scoreType in stats) {
+		  if (stats.hasOwnProperty(scoreType) && stats[scoreType] !== "canceled") {
+			totalScore += stats[scoreType];
+		  }
+		}
+	  }
+	}
+	return totalScore;
+
+}
   
