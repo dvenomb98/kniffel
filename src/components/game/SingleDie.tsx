@@ -1,3 +1,4 @@
+import { useGameContext } from "@/context/game/GameContext";
 import { Die } from "@/types/game/types";
 import classNames from "classnames";
 import React, { FC } from "react";
@@ -5,13 +6,13 @@ import React, { FC } from "react";
 interface SingleDieProps {
 	die: Die;
 	holdDie: () => void;
-	rollsLeft: number
 }
 
-const SingleDie: FC<SingleDieProps> = ({ die, holdDie, rollsLeft }) => {
+const SingleDie: FC<SingleDieProps> = ({ die, holdDie }) => {
+	const {gameValues} = useGameContext()
 	const { value, isHeld } = die;
 
-	const shouldChangeBorder = isHeld || !rollsLeft
+	const shouldChangeBorder = isHeld || !gameValues.rollsLeft
 
 	return (
 		<div

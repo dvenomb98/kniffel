@@ -1,6 +1,6 @@
 // possible results 1-6
 
-import { Player, PlayerTurn } from "@/types/game/types";
+import { GameType, Player, PlayerTurn } from "@/types/game/types";
 import { nanoid } from "nanoid";
 
 export const initialScore = {
@@ -11,7 +11,6 @@ export const initialScore = {
 		for_er: 0,
 		five_er: 0,
 		six_er: 0,
-		gesamt: 0,
 	},
 	bottom_layer: {
 		dreier_pasch: 0,
@@ -21,7 +20,6 @@ export const initialScore = {
 		full_house: 0,
 		kniffel: 0,
 		chance: 0,
-		gesamt: 0,
 	},
 };
 
@@ -43,4 +41,13 @@ export const initialPlayerTwoStats: Player = {
 	order: PlayerTurn.PLAYER_TWO,
 	stats: initialScore,
 	final_score: 0,
+};
+
+export const initialGameValues: GameType = {
+	boardValues: initialDice,
+	player_one: initialPlayerOneStats,
+	player_two: initialPlayerTwoStats,
+	playerTurn: PlayerTurn.PLAYER_ONE,
+	rollsLeft: 3,
+	possibleScores: initialScore,
 };

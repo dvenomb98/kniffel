@@ -10,6 +10,11 @@ export type PossibleValue = number | "canceled"
 export type PossibleScore = typeof initialScore
 
 
+export type UpperLayerKeys = "one_er" | "two_er" | "three_er" | "for_er" | "five_er" | "six_er"
+export type BottomLayerKeys = "dreier_pasch" | "vierer_pasch" | "kleine" | "grobe" | "full_house" | "kniffel" | "chance"
+export type Layer = "upper_layer" | "bottom_layer"
+
+
 export interface UpperLayer {
     one_er: PossibleValue
     two_er: PossibleValue
@@ -17,7 +22,6 @@ export interface UpperLayer {
     for_er: PossibleValue
     five_er: PossibleValue
     six_er: PossibleValue
-    gesamt: number 
 }
 
 export interface BottomLayer {
@@ -28,7 +32,6 @@ export interface BottomLayer {
     full_house: PossibleValue
     kniffel: PossibleValue
     chance: PossibleValue
-    gesamt: number
 }
 
 export interface GameStats {

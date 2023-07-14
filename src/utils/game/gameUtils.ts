@@ -1,4 +1,5 @@
-import { Die } from "@/types/game/types";
+import { initialScore } from "@/config/game/config";
+import { Die, PossibleScore } from "@/types/game/types";
 import { nanoid } from "nanoid";
 
 export const sleep = (ms: number) => {
@@ -33,6 +34,10 @@ export const countDice = (dice: Die[]): { [key: number]: number } => {
 	}
 	return counts;
 };
+
+export const canAddScore = (scoreType: keyof typeof initialScore.upper_layer, possibleScores: PossibleScore) => {
+	return possibleScores.upper_layer[scoreType] > 0;
+}
 
 export const calculatePossibleScores = (dice: Die[]) => {
 	const counts = countDice(dice);

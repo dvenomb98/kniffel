@@ -1,24 +1,21 @@
-import { Player, PossibleScore } from '@/types/game/types'
-import React, { Dispatch, FC } from 'react'
-import UpperLayer from './UpperLayer'
+import React, {  FC } from 'react'
 import BottomLayer from './BottomLayer'
-import { Action } from '@/utils/game/gameReducer'
+import { useGameContext } from '@/context/game/GameContext'
+import UpperLayerScore from './UpperLayerScore'
 
-interface StatsBarProps {
-   playerOnTurn: Player
-   dispatch: Dispatch<Action>
-   possibleScores: PossibleScore
-}
 
-const StatsBar: FC<StatsBarProps> = ({playerOnTurn, dispatch, possibleScores}) => {
+
+const StatsBar: FC = () => {
+
+  const {currentPlayer} = useGameContext()
   return (
     <div className='flex flex-col gap-2 basis-1/4'>
-      <p>Current turn: {playerOnTurn.name}
-      <span className='text-primary-gray mx-2'>{`(${playerOnTurn.order})`}</span>
+      <p>Current turn: {currentPlayer.name}
+      <span className='text-primary-gray mx-2'>{`(${currentPlayer.order})`}</span>
       </p>
 
     <div className='flex flex-col gap-4'>
-        <UpperLayer stats={playerOnTurn.stats.upper_layer} dispatch={dispatch} possibleScores={possibleScores} />
+        <UpperLayerScore  />
         {/* <BottomLayer stats={playerOnTurn.stats.bottom_layer} dispatch={dispatch} /> */}
     </div>
     </div>
