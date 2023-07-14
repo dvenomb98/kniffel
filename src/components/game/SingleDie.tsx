@@ -19,7 +19,7 @@ const SingleDie: FC<SingleDieProps> = ({ die, holdDie }) => {
 			onClick={holdDie}
 			className={classNames(
 				"w-32 aspect-square border-2 rounded-md flex items-center justify-center bg-secondary-dark",
-				shouldChangeBorder ?  "border-primary-gold" : "border-neutral-dark"
+				shouldChangeBorder ?  "border-primary-gold-light" : "border-neutral-dark"
 			)}
 		>
 			<p className="text-h2">{!value ? "?" : value}</p>

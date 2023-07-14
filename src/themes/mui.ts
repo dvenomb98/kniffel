@@ -29,7 +29,7 @@ const THEME = createTheme({
 		},
 	},
 	palette: {
-		mode: "light",
+		mode: "dark",
 		divider: "#6b7280",
 		primary: {
 			light: "#fef3c7",

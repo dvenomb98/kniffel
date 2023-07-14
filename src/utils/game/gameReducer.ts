@@ -1,4 +1,11 @@
-import { BottomLayerKeys, GameType, Layer, PlayerTurn, PossibleValue, UpperLayerKeys } from "@/types/game/types";
+import {
+	BottomLayerKeys,
+	GameType,
+	Layer,
+	PlayerTurn,
+	PossibleValue,
+	UpperLayerKeys,
+} from "@/types/game/types";
 import { calculatePossibleScores, generateNewDie } from "./gameUtils";
 import { initialDice, initialScore } from "@/config/game/config";
 
@@ -12,14 +19,13 @@ export enum ActionTypes {
 
 export type Action =
 	| { type: ActionTypes.ROLL_DICE }
-	| { type: ActionTypes.SWITCH_PLAYER }
 	| { type: ActionTypes.HOLD_DIE; payload: string } // id of the die
 	| {
 			type: ActionTypes.SET_SCORE;
 			payload: {
-				scoreType: UpperLayerKeys | BottomLayerKeys
+				scoreType: UpperLayerKeys | BottomLayerKeys;
 				scoreValue: PossibleValue;
-				layer: Layer
+				layer: Layer;
 			};
 	  };
 
@@ -39,15 +45,6 @@ export const gameReducer = (state: GameType, action: Action) => {
 				boardValues: newBoardValues,
 				possibleScores: possibleScores,
 			};
-		case ActionTypes.SWITCH_PLAYER:
-			return {
-				...state,
-				rollsLeft: 3,
-				playerTurn:
-					state.playerTurn === PlayerTurn.PLAYER_ONE
-						? PlayerTurn.PLAYER_TWO
-						: PlayerTurn.PLAYER_ONE,
-			};
 		case ActionTypes.HOLD_DIE:
 			return {
 				...state,
@@ -62,7 +59,8 @@ export const gameReducer = (state: GameType, action: Action) => {
 			const defaultResetState = {
 				...state,
 				boardValues: initialDice,
-				playerTurn: playerTurn === PlayerTurn.PLAYER_ONE ? PlayerTurn.PLAYER_TWO : PlayerTurn.PLAYER_ONE,
+				playerTurn:
+					playerTurn === PlayerTurn.PLAYER_ONE ? PlayerTurn.PLAYER_TWO : PlayerTurn.PLAYER_ONE, // switch player turn
 				rollsLeft: 3, // resetting rolls left and possible scores after scoring
 				possibleScores: initialScore, // resetting dice state
 			};
@@ -71,30 +69,45 @@ export const gameReducer = (state: GameType, action: Action) => {
 			const playerToUpdate = playerTurn === PlayerTurn.PLAYER_ONE ? player_one : player_two;
 
 			// we need to check whether scoreType belongs to upper_layer or bottom_layer
-			let updatedLayer 
+			let updatedLayer;
 
 			if (layer === "upper_layer") {
 				updatedLayer = {
 					...playerToUpdate.stats.upper_layer,
 					[scoreType as keyof typeof playerToUpdate.stats.upper_layer]: scoreValue,
-				}
+				};
 
 				return {
 					...defaultResetState,
 					player_one:
 						playerTurn === PlayerTurn.PLAYER_ONE
-							? { ...player_one, stats: { ...player_one.stats, upper_layer: updatedLayer} }
+							? { ...player_one, stats: { ...player_one.stats, upper_layer: updatedLayer } }
 							: player_one,
 					player_two:
 						playerTurn === PlayerTurn.PLAYER_TWO
-							? { ...player_two, stats: { ...player_one.stats, upper_layer: updatedLayer} }
+							? { ...player_two, stats: { ...player_one.stats, upper_layer: updatedLayer } }
+							: player_two,
+				};
+			} else if (layer === "bottom_layer") {
+				updatedLayer = {
+					...playerToUpdate.stats.bottom_layer,
+					[scoreType as keyof typeof playerToUpdate.stats.bottom_layer]: scoreValue,
+				};
+
+				return {
+					...defaultResetState,
+					player_one:
+						playerTurn === PlayerTurn.PLAYER_ONE
+							? { ...player_one, stats: { ...player_one.stats, bottom_layer: updatedLayer } }
+							: player_one,
+					player_two:
+						playerTurn === PlayerTurn.PLAYER_TWO
+							? { ...player_two, stats: { ...player_one.stats, bottom_Layer: updatedLayer } }
 							: player_two,
 				};
 			}
 
-			return state
-
-	
+			return state;
 
 		default:
 			return state;

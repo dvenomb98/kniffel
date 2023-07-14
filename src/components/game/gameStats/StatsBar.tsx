@@ -1,25 +1,24 @@
-import React, {  FC } from 'react'
-import BottomLayer from './BottomLayer'
-import { useGameContext } from '@/context/game/GameContext'
-import UpperLayerScore from './UpperLayerScore'
-
-
+import React, { FC } from "react";
+import { useGameContext } from "@/context/game/GameContext";
+import UpperLayerScore from "./UpperLayerScore";
+import BottomLayerScore from "./BottomLayerScore";
 
 const StatsBar: FC = () => {
+	const { currentPlayer } = useGameContext();
 
-  const {currentPlayer} = useGameContext()
-  return (
-    <div className='flex flex-col gap-2 basis-1/4'>
-      <p>Current turn: {currentPlayer.name}
-      <span className='text-primary-gray mx-2'>{`(${currentPlayer.order})`}</span>
-      </p>
+	return (
+		<div className="flex flex-col gap-2 basis-1/4  p-8 border border-dashed justify-between border-secondary rounded-md">
+			<p className="font-light">
+				Current turn: <span className="text-primary-gold">{currentPlayer.name}</span>
+				<span className="text-primary-gray mx-2">{`(${currentPlayer.order})`}</span>
+			</p>
 
-    <div className='flex flex-col gap-4'>
-        <UpperLayerScore  />
-        {/* <BottomLayer stats={playerOnTurn.stats.bottom_layer} dispatch={dispatch} /> */}
-    </div>
-    </div>
-  )
-}
+			<div className="flex flex-col gap-4">
+				<UpperLayerScore />
+				<BottomLayerScore />
+			</div>
+		</div>
+	);
+};
 
-export default StatsBar
+export default StatsBar;

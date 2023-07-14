@@ -1,6 +1,47 @@
-import { initialScore } from "@/config/game/config";
-import { Die, PossibleScore } from "@/types/game/types";
+import { BottomLayerKeys, Die, Layer, Player, PossibleScore, ScoreKeys, UpperLayerKeys } from "@/types/game/types";
 import { nanoid } from "nanoid";
+
+const isUpperLayerKey = (key: ScoreKeys): key is UpperLayerKeys => {
+	return ['one_er', 'two_er', 'three_er', 'for_er', 'five_er', 'six_er'].includes(key);
+};
+
+const isBottomLayerKey = (key: ScoreKeys): key is BottomLayerKeys => {
+	return ['dreier_pasch', 'vierer_pasch', 'kleine', 'grobe', 'full_house', 'kniffel', 'chance'].includes(key);
+};
+
+export const hasAtLeastNOfAKind = (n: number, counts: { [key: number]: number }): boolean => {
+	return Object.values(counts).some((count) => count >= n);
+};
+
+export const sumAllDice = (dice: Die[]): number => {
+	return dice.reduce((sum, die) => sum + die.value, 0);
+};
+
+export const isSmallStraight = (counts: { [key: number]: number }): boolean => {
+	const straights = [
+		[1, 2, 3, 4],
+		[2, 3, 4, 5],
+		[3, 4, 5, 6],
+	];
+	return straights.some((straight) => straight.every((num) => counts[num] >= 1));
+};
+
+export const isLargeStraight = (counts: { [key: number]: number }): boolean => {
+	const straights = [
+		[1, 2, 3, 4, 5],
+		[2, 3, 4, 5, 6],
+	];
+	return straights.some((straight) => straight.every((num) => counts[num] >= 1));
+};
+
+export const isFullHouse = (counts: { [key: number]: number }): boolean => {
+	const values = Object.values(counts);
+	return values.includes(2) && values.includes(3);
+};
+
+export const calculateChance = (dice: Die[]): number => {
+	return sumAllDice(dice);
+};
 
 export const sleep = (ms: number) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -35,8 +76,26 @@ export const countDice = (dice: Die[]): { [key: number]: number } => {
 	return counts;
 };
 
-export const canAddScore = (scoreType: keyof typeof initialScore.upper_layer, possibleScores: PossibleScore) => {
-	return possibleScores.upper_layer[scoreType] > 0;
+export const canAddScore = (
+	scoreType: ScoreKeys,
+	possibleScores: PossibleScore,
+	layer: Layer,
+	currentPlayer: Player
+) => {
+	if (layer === "upper_layer" && isUpperLayerKey(scoreType)) {
+		if (!!currentPlayer.stats.upper_layer[scoreType] ) {
+			return false; // Score has already been assigned
+		}
+		return possibleScores.upper_layer[scoreType] > 0;
+	}
+	if (layer === "bottom_layer" && isBottomLayerKey(scoreType)) {
+		if (!!currentPlayer.stats.bottom_layer[scoreType]) {
+			return false; // Score has already been assigned
+		}
+		return possibleScores.bottom_layer[scoreType] > 0;
+	}
+	return false;
+
 }
 
 export const calculatePossibleScores = (dice: Die[]) => {
@@ -50,17 +109,15 @@ export const calculatePossibleScores = (dice: Die[]) => {
 		for_er: counts[4] * 4 || 0,
 		five_er: counts[5] * 5 || 0,
 		six_er: counts[6] * 6 || 0,
-		gesamt: 0,
 	};
 	const bottom_layer = {
-		dreier_pasch: 0,
-		vierer_pasch: 0,
-		kleine: 0,
-		grobe: 0,
-		full_house: 0,
-		kniffel: 0,
-		chance: 0,
-		gesamt: 0,
+		dreier_pasch: hasAtLeastNOfAKind(3, counts) ? sumAllDice(dice) : 0,
+		vierer_pasch: hasAtLeastNOfAKind(4, counts) ? sumAllDice(dice) : 0,
+		kleine: isSmallStraight(counts) ? 30 : 0,
+		grobe: isLargeStraight(counts) ? 40 : 0,
+		full_house: isFullHouse(counts) ? 25 : 0,
+		kniffel: hasAtLeastNOfAKind(5, counts) ? 50 : 0,
+		chance: sumAllDice(dice),
 	};
 
 	return { upper_layer, bottom_layer };

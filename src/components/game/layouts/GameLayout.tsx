@@ -6,7 +6,7 @@ interface GameLayoutProps {
 
 const GameLayout: FC<GameLayoutProps> = ({children}) => {
   return (
-    <div className='flex flex-col items-start gap-10 basis-3/4'>
+    <div className='flex flex-col items-center gap-10 basis-3/4'>
         {children}
     </div>
   )

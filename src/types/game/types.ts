@@ -10,8 +10,9 @@ export type PossibleValue = number | "canceled"
 export type PossibleScore = typeof initialScore
 
 
-export type UpperLayerKeys = "one_er" | "two_er" | "three_er" | "for_er" | "five_er" | "six_er"
+export type UpperLayerKeys = "one_er" | "two_er" | "three_er" | "for_er" | "five_er" | "six_er" 
 export type BottomLayerKeys = "dreier_pasch" | "vierer_pasch" | "kleine" | "grobe" | "full_house" | "kniffel" | "chance"
+export type ScoreKeys = UpperLayerKeys | BottomLayerKeys;
 export type Layer = "upper_layer" | "bottom_layer"
 
 

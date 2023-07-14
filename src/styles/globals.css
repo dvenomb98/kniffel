@@ -4,7 +4,7 @@
 
 @layer base {
 	body {
-		@apply text-base bg-neutral-dark text-neutral-light;
+		@apply text-base bg-neutral text-neutral-light;
 	}
 }
 
