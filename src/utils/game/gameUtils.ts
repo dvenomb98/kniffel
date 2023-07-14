@@ -1,4 +1,4 @@
-import { BottomLayerKeys, Die, Layer, Player, PossibleScore, ScoreKeys, UpperLayerKeys } from "@/types/game/types";
+import { BottomLayerKeys, Die, GameStats, Layer, Player, PossibleScore, ScoreKeys, UpperLayerKeys } from "@/types/game/types";
 import { nanoid } from "nanoid";
 
 const isUpperLayerKey = (key: ScoreKeys): key is UpperLayerKeys => {
@@ -8,6 +8,8 @@ const isUpperLayerKey = (key: ScoreKeys): key is UpperLayerKeys => {
 const isBottomLayerKey = (key: ScoreKeys): key is BottomLayerKeys => {
 	return ['dreier_pasch', 'vierer_pasch', 'kleine', 'grobe', 'full_house', 'kniffel', 'chance'].includes(key);
 };
+
+
 
 export const hasAtLeastNOfAKind = (n: number, counts: { [key: number]: number }): boolean => {
 	return Object.values(counts).some((count) => count >= n);
@@ -41,10 +43,6 @@ export const isFullHouse = (counts: { [key: number]: number }): boolean => {
 
 export const calculateChance = (dice: Die[]): number => {
 	return sumAllDice(dice);
-};
-
-export const sleep = (ms: number) => {
-	return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 export const generateNewDie = () => {
@@ -122,3 +120,19 @@ export const calculatePossibleScores = (dice: Die[]) => {
 
 	return { upper_layer, bottom_layer };
 };
+
+// export const calculateFinalScore = (playerStats: GameStats) => {
+// 	let totalScore = 0;
+	
+// 	for (const layer in playerStats) {
+// 	  if (playerStats.hasOwnProperty(layer)) {
+// 		const stats = playerStats[layer];
+// 		for (const scoreType in stats) {
+// 		  if (stats.hasOwnProperty(scoreType) && stats[scoreType] !== "canceled") {
+// 			totalScore += stats[scoreType];
+// 		  }
+// 		}
+// 	  }
+// 	}
+// 	return totalScore;
+  

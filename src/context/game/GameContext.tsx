@@ -1,11 +1,8 @@
 import {
-	initialDice,
 	initialGameValues,
 	initialPlayerOneStats,
-	initialPlayerTwoStats,
-	initialScore,
 } from "@/config/game/config";
-import { GameType, Player, PlayerTurn } from "@/types/game/types";
+import {  GameType, Player, PlayerTurn } from "@/types/game/types";
 import { Action, gameReducer } from "@/utils/game/gameReducer";
 import React, { createContext, useReducer, useContext, ReactNode } from "react";
 
@@ -22,14 +19,7 @@ export const GameContext = createContext<{
 
 // Create a provider wrapper component
 export const GameProvider = ({ children }: GameProviderProps) => {
-	const [gameValues, dispatch] = useReducer(gameReducer, {
-		boardValues: initialDice,
-		player_one: initialPlayerOneStats,
-		player_two: initialPlayerTwoStats,
-		playerTurn: PlayerTurn.PLAYER_ONE,
-		rollsLeft: 3,
-		possibleScores: initialScore,
-	});
+	const [gameValues, dispatch] = useReducer(gameReducer, initialGameValues);
 
 	const currentPlayer =
 		gameValues.playerTurn === PlayerTurn.PLAYER_ONE ? gameValues.player_one : gameValues.player_two;

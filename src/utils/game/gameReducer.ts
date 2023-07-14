@@ -1,5 +1,6 @@
 import {
 	BottomLayerKeys,
+	GameState,
 	GameType,
 	Layer,
 	PlayerTurn,
@@ -26,8 +27,10 @@ export type Action =
 				scoreType: UpperLayerKeys | BottomLayerKeys;
 				scoreValue: PossibleValue;
 				layer: Layer;
+				shouldCancel: boolean;
 			};
-	  };
+	  }
+	
 
 export const gameReducer = (state: GameType, action: Action) => {
 	switch (action.type) {
@@ -38,6 +41,7 @@ export const gameReducer = (state: GameType, action: Action) => {
 
 			const newBoardValues = state.boardValues.map((die) => (die.isHeld ? die : generateNewDie()));
 			const possibleScores = calculatePossibleScores(newBoardValues);
+			
 
 			return {
 				...state,
@@ -53,28 +57,33 @@ export const gameReducer = (state: GameType, action: Action) => {
 				),
 			};
 		case ActionTypes.SET_SCORE:
-			const { scoreType, scoreValue, layer } = action.payload;
-			const { player_one, player_two, playerTurn } = state;
+			const { scoreType, scoreValue, layer, shouldCancel } = action.payload;
+			const { player_one, player_two, playerTurn, round } = state;
+
+			const newRound = round + 1;
+			const newGameState = newRound >= 27 ? GameState.FINISHED : GameState.IN_PROGRESS;
 
 			const defaultResetState = {
 				...state,
 				boardValues: initialDice,
 				playerTurn:
-					playerTurn === PlayerTurn.PLAYER_ONE ? PlayerTurn.PLAYER_TWO : PlayerTurn.PLAYER_ONE, // switch player turn
-				rollsLeft: 3, // resetting rolls left and possible scores after scoring
-				possibleScores: initialScore, // resetting dice state
+					playerTurn === PlayerTurn.PLAYER_ONE ? PlayerTurn.PLAYER_TWO : PlayerTurn.PLAYER_ONE,
+				rollsLeft: 3,
+				possibleScores: initialScore,
+				round: newRound,
+				gameState: newGameState
 			};
 
-			// we determine which player to update the score for based on the current playerTurn
 			const playerToUpdate = playerTurn === PlayerTurn.PLAYER_ONE ? player_one : player_two;
 
-			// we need to check whether scoreType belongs to upper_layer or bottom_layer
 			let updatedLayer;
 
 			if (layer === "upper_layer") {
 				updatedLayer = {
 					...playerToUpdate.stats.upper_layer,
-					[scoreType as keyof typeof playerToUpdate.stats.upper_layer]: scoreValue,
+					[scoreType as keyof typeof playerToUpdate.stats.upper_layer]: shouldCancel
+						? "canceled"
+						: scoreValue,
 				};
 
 				return {
@@ -91,7 +100,9 @@ export const gameReducer = (state: GameType, action: Action) => {
 			} else if (layer === "bottom_layer") {
 				updatedLayer = {
 					...playerToUpdate.stats.bottom_layer,
-					[scoreType as keyof typeof playerToUpdate.stats.bottom_layer]: scoreValue,
+					[scoreType as keyof typeof playerToUpdate.stats.bottom_layer]: shouldCancel
+						? "canceled"
+						: scoreValue,
 				};
 
 				return {
@@ -102,13 +113,14 @@ export const gameReducer = (state: GameType, action: Action) => {
 							: player_one,
 					player_two:
 						playerTurn === PlayerTurn.PLAYER_TWO
-							? { ...player_two, stats: { ...player_one.stats, bottom_Layer: updatedLayer } }
+							? { ...player_two, stats: { ...player_one.stats, bottom_layer: updatedLayer } }
 							: player_two,
 				};
 			}
 
 			return state;
 
+		
 		default:
 			return state;
 	}

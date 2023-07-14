@@ -1,6 +1,6 @@
 // possible results 1-6
 
-import { GameType, Player, PlayerTurn } from "@/types/game/types";
+import { GameState, GameType, Player, PlayerTurn } from "@/types/game/types";
 import { nanoid } from "nanoid";
 
 export const initialScore = {
@@ -50,4 +50,6 @@ export const initialGameValues: GameType = {
 	playerTurn: PlayerTurn.PLAYER_ONE,
 	rollsLeft: 3,
 	possibleScores: initialScore,
+	gameState: GameState.IN_PROGRESS,
+	round: 1
 };

@@ -5,6 +5,12 @@ export enum PlayerTurn {
     PLAYER_TWO = "PLAYER_TWO"
 }
 
+export enum GameState {
+    LOADING = 'LOADING',
+    IN_PROGRESS = 'IN_PROGRESS',
+    FINISHED = 'FINISHED',
+  }
+
 export type PossibleValue = number | "canceled"
 
 export type PossibleScore = typeof initialScore
@@ -61,4 +67,6 @@ export interface GameType {
     playerTurn: PlayerTurn,
     rollsLeft: number
     possibleScores: PossibleScore
+    gameState: GameState
+    round: number
 }
