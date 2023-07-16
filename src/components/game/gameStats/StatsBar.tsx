@@ -27,7 +27,6 @@ const StatsBar: FC<StatsBarProps> = ({ currentPlayer }) => {
 			<div className="font-light flex">
 				<p className="flex gap-2">
 					{currentPlayer.name}
-					<span className="text-primary-gold">{`(${currentPlayer.order})`}</span>
 				</p>
 			</div>
 			{!!gameEnded && !!currentPlayer.final_score && (

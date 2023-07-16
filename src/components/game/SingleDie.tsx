@@ -9,7 +9,7 @@ interface SingleDieProps {
 }
 
 const SingleDie: FC<SingleDieProps> = ({ die, holdDie }) => {
-	const { gameValues } = useGameContext();
+	const { gameValues, onMove } = useGameContext();
 	const [animate, setAnimate] = useState<boolean>(false);
 
 	if(!gameValues) return null
@@ -29,12 +29,13 @@ const SingleDie: FC<SingleDieProps> = ({ die, holdDie }) => {
 	}, [value, isHeld, gameValues.rollsLeft]);
 
 	return (
-		<div
+		<button
 			onClick={holdDie}
 			className={classNames(
 				"w-32 aspect-square border-2 rounded-md flex items-center justify-center bg-secondary-dark",
 				shouldChangeBorder ? "border-primary-gold-light" : "border-neutral-dark"
 			)}
+			disabled={!onMove}
 		>
 			<p
 				className={classNames(
@@ -44,7 +45,7 @@ const SingleDie: FC<SingleDieProps> = ({ die, holdDie }) => {
 			>
 				{!value ? "?" : value}
 			</p>
-		</div>
+		</button>
 	);
 };
 

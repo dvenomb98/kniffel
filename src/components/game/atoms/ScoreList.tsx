@@ -21,7 +21,7 @@ interface ScoreListProps {
 }
 
 const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, currentPlayer }) => {
-	const { gameValues, dispatch } = useGameContext();
+	const { gameValues, dispatch, onMove } = useGameContext();
 
 	if(!gameValues) return null
 
@@ -55,9 +55,11 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
 	};
 
 	return (
-		<li
+		<button
 			role="button"
-			onClick={addScore || canCancelScore ? handleAddScore : undefined}
+			onClick={handleAddScore}
+			disabled={((!canCancelScore || !addScore) && !onMove)}
+			
 			className={classNames(
 				"flex items-center gap-2 justify-between border p-2 transition-all ease-in-out bg-neutral-dark rounded-md ",
 				addScore
@@ -65,8 +67,9 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
 					: canCancelScore
 					? "border-primary-error-light hover:border-primary-error"
 					: "border-secondary border-dashed opacity-70",
+					
 
-				(canCancelScore || addScore) && "cursor-pointer"
+			
 			)}
 		>
 			<span className="flex items-center gap-2">
@@ -78,7 +81,7 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
 			<span className={classNames(isCancelled && "text-primary-error")}>
 				{isCancelled ? "X" : value}
 			</span>
-		</li>
+		</button>
 	);
 };
 

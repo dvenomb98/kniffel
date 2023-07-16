@@ -1,28 +1,38 @@
 import React, { FC, ReactNode, useEffect } from "react";
 import GameLayout from "./layouts/GameLayout";
 import Board from "./Board";
-import { Button } from "@mui/material";
+import { Button, CircularProgress} from "@mui/material";
 import StatsBar from "./gameStats/StatsBar";
 import { ActionTypes } from "@/utils/game/gameReducer";
 import { useGameContext } from "@/context/game/GameContext";
 import { GameState } from "@/types/game/types";
+import classNames from "classnames";
+import GameCreateLayout from "./layouts/GameCreateLayout";
 
 interface GameMainLayoutProps {
 	children: ReactNode;
 }
 
-const GameMainLayout: FC<GameMainLayoutProps> = ({ children }) => (
-	<div className="flex justify-between items-start gap-5 w-[1024px] overflow-x-auto  border-secondary/50 border p-10 bg-neutral-dark rounded-md">
-		{children}
-	</div>
-);
+const GameMainLayout: FC<GameMainLayoutProps> = ({ children }) => {
+	
+	return (
+		<div
+			className={classNames(
+				"flex justify-between items-start gap-5 w-[1024px] border-secondary/50 overflow-x-auto transform duration-500 ease-in-out  border p-10 bg-neutral-dark rounded-md"
+			)}
+		>
+			{children}
+		</div>
+	);
+};
 
 const Game: FC = () => {
-	const { gameValues, dispatch, currentPlayer } = useGameContext();
+	const { gameValues, dispatch, currentPlayer, onMove } = useGameContext();
 
-	if(!gameValues) return null
-	
+	if (!gameValues) return null
+
 	const { gameState, rollsLeft } = gameValues;
+	
 
 	useEffect(() => {
 		if (
@@ -36,11 +46,12 @@ const Game: FC = () => {
 
 	if (gameState === GameState.NOT_STARTED) {
 		return (
-			<GameMainLayout>
-				<div className="flex h-full w-full items-center justify-center">
-					Waiting for other player...
+			<GameCreateLayout>
+				<div className="flex flex-col gap-10 items-center justify-center w-full">
+					<h4 className="flex animate-pulse">Waiting for other player...</h4>
+					<CircularProgress color="primary" />
 				</div>
-			</GameMainLayout>
+			</GameCreateLayout>
 		);
 	} else if (gameState === GameState.IN_PROGRESS) {
 		return (
@@ -53,7 +64,7 @@ const Game: FC = () => {
 							variant="outlined"
 							color="primary"
 							size="large"
-							disabled={!gameValues.rollsLeft}
+							disabled={!gameValues.rollsLeft || !onMove}
 						>
 							Roll dices
 						</Button>

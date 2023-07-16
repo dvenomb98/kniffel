@@ -8,9 +8,9 @@ import React, {
 	useReducer,
 	useContext,
 	ReactNode,
-	useMemo,
 	useCallback,
 	useEffect,
+	useMemo,
 } from "react";
 import { db } from "../../../firebase";
 
@@ -18,6 +18,7 @@ interface GameProviderProps {
 	children: ReactNode;
 	session_values: GameType;
 	game_id: string;
+	player_id: string | null;
 }
 
 // Create the context
@@ -25,10 +26,16 @@ export const GameContext = createContext<{
 	gameValues: GameType | null;
 	dispatch: React.Dispatch<Action>;
 	currentPlayer: Player;
-}>({ gameValues: null, dispatch: () => {}, currentPlayer: initialPlayerOneStats });
+	onMove: boolean;
+}>({ gameValues: null, dispatch: () => {}, currentPlayer: initialPlayerOneStats, onMove: false });
 
 // Create a provider wrapper component
-export const GameProvider = ({ children, session_values, game_id }: GameProviderProps) => {
+export const GameProvider = ({
+	children,
+	session_values,
+	game_id,
+	player_id,
+}: GameProviderProps) => {
 	const [gameValues, dispatch] = useReducer(gameReducer, session_values);
 
 	useEffect(() => {
@@ -48,11 +55,17 @@ export const GameProvider = ({ children, session_values, game_id }: GameProvider
 		}
 	}, [game_id, gameValues, debouncedUpdateFirestore]);
 
-	const currentPlayer =
-		gameValues.playerTurn === PlayerTurn.PLAYER_ONE ? gameValues.player_one : gameValues.player_two;
+	const currentPlayer = useMemo(
+		() =>
+			gameValues.playerTurn === PlayerTurn.PLAYER_ONE
+				? gameValues.player_one
+				: gameValues.player_two,
+		[gameValues.playerTurn]
+	);
 
+	const onMove = currentPlayer?.id === player_id;
 	return (
-		<GameContext.Provider value={{ gameValues, dispatch, currentPlayer }}>
+		<GameContext.Provider value={{ gameValues, dispatch, currentPlayer, onMove }}>
 			{children}
 		</GameContext.Provider>
 	);

@@ -14,9 +14,6 @@ const GamePage = () => {
 	const [playerId, setPlayerId] = useState<string | null>(null);
 	const [game, setGame] = useState<GameType | null>(null);
 
-
-    console.log(game)
-
 	useEffect(() => {
 		const playerId_localed = localStorage.getItem("playerId");
 
@@ -34,7 +31,9 @@ const GamePage = () => {
 		const sessionRef = doc(db, "sessions", gameId as string);
 
 		const unsub = onSnapshot(sessionRef, (doc) => {
-			if (!doc.exists()) console.log("Session does not exists!");
+			if (!doc.exists()) {
+				return null;
+			}
 
 			let sessionData = doc.data() as GameType;
 			const { player_one, player_two, gameState } = sessionData;
@@ -59,11 +58,13 @@ const GamePage = () => {
 	return (
 		<PageLayout>
 			<>
-				{game && 
-					<GameProvider session_values={game} game_id={gameId as string}>
+				{game ? (
+					<GameProvider session_values={game} game_id={gameId as string} player_id={playerId}>
 						<Game />
 					</GameProvider>
-}
+				) : (
+					<div>Game not found</div>
+				)}
 			</>
 		</PageLayout>
 	);
