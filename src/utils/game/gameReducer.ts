@@ -9,7 +9,6 @@ import {
 } from "@/types/game/types";
 import { calculateFinalScore, calculatePossibleScores, generateNewDie } from "./gameUtils";
 import { initialDice, initialScore } from "@/config/game/config";
-import { AcceptedPlugin } from "postcss";
 
 // Define action types
 export enum ActionTypes {
@@ -131,8 +130,9 @@ export const gameReducer = (state: GameType, action: Action) => {
 
 			return {
 				...state,
-				player_one: { ...player_1, final_score: player_one_final_score },
-				player_two: { ...player_2, final_score: player_two_final_score },
+				player_one: { ...player_1, final_score: player_one_final_score.final_score, bonus_score: player_one_final_score.bonus_points },
+				player_two: { ...player_2, final_score: player_two_final_score.final_score, bonus_score: player_two_final_score.bonus_points },
+				winner: player_one_final_score.final_score > player_two_final_score.final_score ? PlayerTurn.PLAYER_ONE : PlayerTurn.PLAYER_TWO
 			};
 
 		default:

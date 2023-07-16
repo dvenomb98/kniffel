@@ -1,4 +1,4 @@
-import { BottomLayerKeys, Die, GameStats, Layer, Player, PossibleScore, ScoreKeys, UpperLayerKeys } from "@/types/game/types";
+import { BottomLayer, BottomLayerKeys, Die, GameStats, Layer, Player, PossibleScore, ScoreKeys, UpperLayer, UpperLayerKeys } from "@/types/game/types";
 import { nanoid } from "nanoid";
 
 const isUpperLayerKey = (key: ScoreKeys): key is UpperLayerKeys => {
@@ -8,8 +8,6 @@ const isUpperLayerKey = (key: ScoreKeys): key is UpperLayerKeys => {
 const isBottomLayerKey = (key: ScoreKeys): key is BottomLayerKeys => {
 	return ['dreier_pasch', 'vierer_pasch', 'kleine', 'grobe', 'full_house', 'kniffel', 'chance'].includes(key);
 };
-
-
 
 export const hasAtLeastNOfAKind = (n: number, counts: { [key: number]: number }): boolean => {
 	return Object.values(counts).some((count) => count >= n);
@@ -121,20 +119,35 @@ export const calculatePossibleScores = (dice: Die[]) => {
 	return { upper_layer, bottom_layer };
 };
 
-export const calculateFinalScore = (playerStats: GameStats) => {
-	let totalScore = 0;
-	
-	for (const layer in playerStats) {
-	  if (playerStats.hasOwnProperty(layer)) {
-		const stats = playerStats[layer];
-		for (const scoreType in stats) {
-		  if (stats.hasOwnProperty(scoreType) && stats[scoreType] !== "canceled") {
-			totalScore += stats[scoreType];
-		  }
+export const calculateFinalScore = (playerStats: GameStats): {final_score: number, bonus_points: number} => {
+	let final_score = 0;
+	let bonus_points = 0;
+	let upperLayerTotal = 0
+
+	for (const layerKey in playerStats) {
+		if (playerStats.hasOwnProperty(layerKey)) {
+			const layer = playerStats[layerKey as keyof GameStats];
+			for (const key in layer) {
+				if (layer.hasOwnProperty(key) && typeof layer[key as keyof (UpperLayer | BottomLayer)] === "number") {
+					final_score += layer[key as keyof (UpperLayer | BottomLayer)];
+				}
+			}
+		}
+	}
+	for (const key in playerStats.upper_layer) {
+		const score = playerStats.upper_layer[key as keyof UpperLayer];
+		if (typeof score === "number") {
+		  upperLayerTotal += score;
 		}
 	  }
-	}
-	return totalScore;
-
+	  
+	  if (upperLayerTotal >= 63) {
+		bonus_points += 35;
+	  }
+  
+	return { final_score: final_score + bonus_points, bonus_points };
 }
+
+
+
   

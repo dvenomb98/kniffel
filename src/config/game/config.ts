@@ -34,6 +34,7 @@ export const initialPlayerOneStats: Player = {
 	order: PlayerTurn.PLAYER_ONE,
 	stats: initialScore,
 	final_score: 0,
+	bonus_score: 0
 };
 
 export const initialPlayerTwoStats: Player = {
@@ -41,6 +42,7 @@ export const initialPlayerTwoStats: Player = {
 	order: PlayerTurn.PLAYER_TWO,
 	stats: initialScore,
 	final_score: 0,
+	bonus_score: 0
 };
 
 export const initialGameValues: GameType = {
@@ -51,5 +53,6 @@ export const initialGameValues: GameType = {
 	rollsLeft: 3,
 	possibleScores: initialScore,
 	gameState: GameState.IN_PROGRESS,
-	round: 1
+	round: 1,
+	winner: undefined
 };

@@ -23,7 +23,7 @@ const Game: FC = () => {
 
 
 	useEffect(() => {
-		if(gameState === GameState.FINISHED) {
+		if(gameState === GameState.FINISHED && !gameValues.player_one.final_score && !gameValues.player_two.final_score) {
 			dispatch({type: ActionTypes.CALCULATE_SCORE})
 		}
 	}, [gameState])

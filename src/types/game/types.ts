@@ -51,6 +51,7 @@ export interface Player {
     order: PlayerTurn
     stats: GameStats
     final_score: number
+    bonus_score: number
 }
 
 
@@ -69,4 +70,5 @@ export interface GameType {
     possibleScores: PossibleScore
     gameState: GameState
     round: number
+    winner?: PlayerTurn
 }

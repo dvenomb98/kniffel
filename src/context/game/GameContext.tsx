@@ -2,9 +2,9 @@ import {
 	initialGameValues,
 	initialPlayerOneStats,
 } from "@/config/game/config";
-import {  GameType, Player, PlayerTurn } from "@/types/game/types";
+import {  GameState, GameType, Player, PlayerTurn } from "@/types/game/types";
 import { Action, gameReducer } from "@/utils/game/gameReducer";
-import React, { createContext, useReducer, useContext, ReactNode } from "react";
+import React, { createContext, useReducer, useContext, ReactNode, useMemo } from "react";
 
 interface GameProviderProps {
 	children: ReactNode;

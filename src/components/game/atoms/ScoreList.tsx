@@ -17,15 +17,13 @@ interface ScoreListProps {
 	value: PossibleValue;
 	object_key: ScoreKeys;
 	layer: Layer;
-	currentPlayer: Player
+	currentPlayer: Player;
 }
 
 const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, currentPlayer }) => {
-	const { gameValues, dispatch} = useGameContext();
+	const { gameValues, dispatch } = useGameContext();
 	const { possibleScores, rollsLeft } = gameValues;
 	const isCancelled = value === "canceled";
-
-	
 
 	const addScore = useMemo(
 		() => canAddScore(object_key, possibleScores, layer, currentPlayer),
@@ -38,7 +36,6 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
 			: possibleScores.bottom_layer[object_key as BottomLayerKeys];
 	}, [possibleScores, currentPlayer, layer]);
 
-	// FIX CAN CANCEL SCORE DOESNT DISPLAY
 	const canCancelScore = !addScore && !correctLayerScoreValue && !rollsLeft && !value;
 
 	const handleAddScore = () => {
@@ -60,9 +57,12 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
 			className={classNames(
 				"flex items-center gap-2 justify-between border p-2 transition-all ease-in-out bg-neutral-dark rounded-md ",
 				addScore
-					? "text-primary-gold-light opacity-100 border-primary-gold-light border-solid hover:border-primary-gold  cursor-pointer"
+					? "text-primary-gold-light opacity-100 border-primary-gold-light border-solid hover:border-primary-gold"
+					: canCancelScore
+					? "border-primary-error-light hover:border-primary-error"
 					: "border-secondary border-dashed opacity-70",
-				canCancelScore && "border-primary-error-light hover:border-primary-error"
+
+				(canCancelScore || addScore) && "cursor-pointer"
 			)}
 		>
 			<span className="flex items-center gap-2">

@@ -2,8 +2,9 @@
 import React, { FC } from "react";
 import ScoreList from "../atoms/ScoreList";
 import ScoreLayout from "../layouts/ScoreLayout";
-import { useGameContext } from "@/context/game/GameContext";
 import { Player } from "@/types/game/types";
+
+
 
 interface UpperLayerScoreProps {
 	currentPlayer: Player
