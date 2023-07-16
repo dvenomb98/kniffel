@@ -6,7 +6,7 @@ export enum PlayerTurn {
 }
 
 export enum GameState {
-    LOADING = 'LOADING',
+    NOT_STARTED = "NOT_STARTED",
     IN_PROGRESS = 'IN_PROGRESS',
     FINISHED = 'FINISHED',
   }
@@ -52,6 +52,8 @@ export interface Player {
     stats: GameStats
     final_score: number
     bonus_score: number
+    is_connected: boolean
+    id?: string | null
 }
 
 
@@ -70,5 +72,6 @@ export interface GameType {
     possibleScores: PossibleScore
     gameState: GameState
     round: number
-    winner?: PlayerTurn
+    winner: PlayerTurn | null
+    id: string | null
 }

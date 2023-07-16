@@ -30,19 +30,23 @@ export const initialDice = Array.from({ length: 5 }, () => ({
 }));
 
 export const initialPlayerOneStats: Player = {
-	name: "danielbilek98@seznam.cz",
+	name: "Player One",
 	order: PlayerTurn.PLAYER_ONE,
 	stats: initialScore,
 	final_score: 0,
-	bonus_score: 0
+	bonus_score: 0,
+	is_connected: false,
+	id: null
 };
 
 export const initialPlayerTwoStats: Player = {
-	name: "petrjmeno@seznam.cz",
+	name: "Player Two",
 	order: PlayerTurn.PLAYER_TWO,
 	stats: initialScore,
 	final_score: 0,
-	bonus_score: 0
+	bonus_score: 0,
+	is_connected: false,
+	id: null
 };
 
 export const initialGameValues: GameType = {
@@ -52,7 +56,9 @@ export const initialGameValues: GameType = {
 	playerTurn: PlayerTurn.PLAYER_ONE,
 	rollsLeft: 3,
 	possibleScores: initialScore,
-	gameState: GameState.IN_PROGRESS,
+	gameState: GameState.NOT_STARTED,
 	round: 1,
-	winner: undefined
+	winner: null,
+	id: null
+	
 };

@@ -12,11 +12,13 @@ import { initialDice, initialScore } from "@/config/game/config";
 
 // Define action types
 export enum ActionTypes {
+	CREATE_GAME = "CREATE_GAME",
 	ROLL_DICE = "ROLL_DICE",
 	SWITCH_PLAYER = "SWITCH_PLAYER",
 	HOLD_DIE = "HOLD_DIE",
 	SET_SCORE = "SET_SCORE",
 	CALCULATE_SCORE = "CALCULATE_SCORE",
+	UPDATE_SESSION_VALUES = "UPDATE_SESSION_VALUES"
 }
 
 export type Action =
@@ -31,10 +33,17 @@ export type Action =
 				shouldCancel: boolean;
 			};
 	  }
-	| { type: ActionTypes.CALCULATE_SCORE };
+	| { type: ActionTypes.CALCULATE_SCORE }
+	| { type: ActionTypes.CREATE_GAME }
+	| { type: ActionTypes.UPDATE_SESSION_VALUES;
+	payload: GameType}
 
 export const gameReducer = (state: GameType, action: Action) => {
 	switch (action.type) {
+		case ActionTypes.UPDATE_SESSION_VALUES:
+			return action.payload
+		case ActionTypes.CREATE_GAME:
+			return { ...state, gameState: GameState.IN_PROGRESS };
 		case ActionTypes.ROLL_DICE:
 			if (!state.rollsLeft) {
 				return state; // if no rolls left, do nothing
@@ -130,9 +139,20 @@ export const gameReducer = (state: GameType, action: Action) => {
 
 			return {
 				...state,
-				player_one: { ...player_1, final_score: player_one_final_score.final_score, bonus_score: player_one_final_score.bonus_points },
-				player_two: { ...player_2, final_score: player_two_final_score.final_score, bonus_score: player_two_final_score.bonus_points },
-				winner: player_one_final_score.final_score > player_two_final_score.final_score ? PlayerTurn.PLAYER_ONE : PlayerTurn.PLAYER_TWO
+				player_one: {
+					...player_1,
+					final_score: player_one_final_score.final_score,
+					bonus_score: player_one_final_score.bonus_points,
+				},
+				player_two: {
+					...player_2,
+					final_score: player_two_final_score.final_score,
+					bonus_score: player_two_final_score.bonus_points,
+				},
+				winner:
+					player_one_final_score.final_score > player_two_final_score.final_score
+						? PlayerTurn.PLAYER_ONE
+						: PlayerTurn.PLAYER_TWO,
 			};
 
 		default:

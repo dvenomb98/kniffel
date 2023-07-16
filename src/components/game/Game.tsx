@@ -21,19 +21,22 @@ const Game: FC = () => {
 	const { gameValues, dispatch, currentPlayer } = useGameContext();
 	const { gameState, rollsLeft } = gameValues;
 
-
 	useEffect(() => {
-		if(gameState === GameState.FINISHED && !gameValues.player_one.final_score && !gameValues.player_two.final_score) {
-			dispatch({type: ActionTypes.CALCULATE_SCORE})
+		if (
+			gameState === GameState.FINISHED &&
+			!gameValues.player_one.final_score &&
+			!gameValues.player_two.final_score
+		) {
+			dispatch({ type: ActionTypes.CALCULATE_SCORE });
 		}
-	}, [gameState])
+	}, [gameState]);
 
-
-	if (gameState === GameState.FINISHED) {
+	if (gameState === GameState.NOT_STARTED) {
 		return (
 			<GameMainLayout>
-				<StatsBar currentPlayer={gameValues.player_one} />
-				<StatsBar currentPlayer={gameValues.player_two} />
+				<div className="flex h-full w-full items-center justify-center">
+					Waiting for other player...
+				</div>
 			</GameMainLayout>
 		);
 	} else if (gameState === GameState.IN_PROGRESS) {
@@ -42,22 +45,30 @@ const Game: FC = () => {
 				{/* GAME BOARD */}
 				<GameLayout>
 					<div className="flex items-center justify-between w-full">
-					<Button
-						onClick={() => dispatch({ type: ActionTypes.ROLL_DICE })}
-						variant="outlined"
-						color="primary"
-						size="large"
-						disabled={!gameValues.rollsLeft}
-					>
-						Roll dices
-					</Button>
-					<p className="text-primary-gray">Rolls left: <span className="text-secondary-light">{rollsLeft}</span></p>
+						<Button
+							onClick={() => dispatch({ type: ActionTypes.ROLL_DICE })}
+							variant="outlined"
+							color="primary"
+							size="large"
+							disabled={!gameValues.rollsLeft}
+						>
+							Roll dices
+						</Button>
+						<p className="text-primary-gray">
+							Rolls left: <span className="text-secondary-light">{rollsLeft}</span>
+						</p>
 					</div>
 					<Board />
-					
 				</GameLayout>
 				{/* GAME STATISTICS */}
 				<StatsBar currentPlayer={currentPlayer} />
+			</GameMainLayout>
+		);
+	} else if (gameState === GameState.FINISHED) {
+		return (
+			<GameMainLayout>
+				<StatsBar currentPlayer={gameValues.player_one} />
+				<StatsBar currentPlayer={gameValues.player_two} />
 			</GameMainLayout>
 		);
 	}
