@@ -12,6 +12,8 @@ interface StatsBarProps {
 const StatsBar: FC<StatsBarProps> = ({ currentPlayer }) => {
 	const { gameValues } = useGameContext();
 
+	if(!gameValues) return null
+
 	const isWinner = gameValues?.winner === currentPlayer.order;
 	const gameEnded = gameValues.gameState === GameState.FINISHED;
 

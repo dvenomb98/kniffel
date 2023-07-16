@@ -19,6 +19,9 @@ const GameMainLayout: FC<GameMainLayoutProps> = ({ children }) => (
 
 const Game: FC = () => {
 	const { gameValues, dispatch, currentPlayer } = useGameContext();
+
+	if(!gameValues) return null
+	
 	const { gameState, rollsLeft } = gameValues;
 
 	useEffect(() => {

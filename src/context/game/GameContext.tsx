@@ -22,10 +22,10 @@ interface GameProviderProps {
 
 // Create the context
 export const GameContext = createContext<{
-	gameValues: GameType;
+	gameValues: GameType | null;
 	dispatch: React.Dispatch<Action>;
 	currentPlayer: Player;
-}>({ gameValues: initialGameValues, dispatch: () => {}, currentPlayer: initialPlayerOneStats });
+}>({ gameValues: null, dispatch: () => {}, currentPlayer: initialPlayerOneStats });
 
 // Create a provider wrapper component
 export const GameProvider = ({ children, session_values, game_id }: GameProviderProps) => {

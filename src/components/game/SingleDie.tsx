@@ -11,7 +11,13 @@ interface SingleDieProps {
 const SingleDie: FC<SingleDieProps> = ({ die, holdDie }) => {
 	const { gameValues } = useGameContext();
 	const [animate, setAnimate] = useState<boolean>(false);
+
+	if(!gameValues) return null
+
+	
 	const { value, isHeld } = die;
+
+
 
 	const shouldChangeBorder = isHeld || !gameValues.rollsLeft;
 

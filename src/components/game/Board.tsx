@@ -9,6 +9,9 @@ import { useGameContext } from "@/context/game/GameContext";
 const Board: FC = () => {
 
 	const {gameValues, dispatch} = useGameContext()
+	
+	if(!gameValues) return null
+
 	const {boardValues} = gameValues
 
     const holdDie = (id: string) => {

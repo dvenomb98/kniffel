@@ -64,7 +64,6 @@ const GamePage = () => {
 						<Game />
 					</GameProvider>
 }
-				
 			</>
 		</PageLayout>
 	);

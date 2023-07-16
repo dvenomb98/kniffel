@@ -22,6 +22,10 @@ interface ScoreListProps {
 
 const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, currentPlayer }) => {
 	const { gameValues, dispatch } = useGameContext();
+
+	if(!gameValues) return null
+
+	
 	const { possibleScores, rollsLeft } = gameValues;
 	const isCancelled = value === "canceled";
 
