@@ -5,20 +5,20 @@ import { nanoid } from "nanoid";
 
 export const initialScore = {
 	upper_layer: {
-		one_er: 0,
-		two_er: 0,
-		three_er: 0,
-		for_er: 0,
-		five_er: 0,
-		six_er: 0,
+		aces: 0,
+		twos: 0,
+		threes: 0,
+		fours: 0,
+		fives: 0,
+		sixes: 0,
 	},
 	bottom_layer: {
-		dreier_pasch: 0,
-		vierer_pasch: 0,
-		kleine: 0,
-		grobe: 0,
+		threes_of_kind: 0,
+		fours_of_kind: 0,
+		small_straight: 0,
+		large_straight: 0,
 		full_house: 0,
-		kniffel: 0,
+		yahtzee: 0,
 		chance: 0,
 	},
 };

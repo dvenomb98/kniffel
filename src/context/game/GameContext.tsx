@@ -1,4 +1,4 @@
-import { initialGameValues, initialPlayerOneStats } from "@/config/game/config";
+import { initialPlayerOneStats } from "@/config/game/config";
 import { GameType, Player, PlayerTurn } from "@/types/game/types";
 import { Action, ActionTypes, gameReducer } from "@/utils/game/gameReducer";
 import { doc, setDoc } from "firebase/firestore";
@@ -11,6 +11,7 @@ import React, {
 	useCallback,
 	useEffect,
 	useMemo,
+	useState,
 } from "react";
 import { db } from "../../../firebase";
 
@@ -27,7 +28,9 @@ export const GameContext = createContext<{
 	dispatch: React.Dispatch<Action>;
 	currentPlayer: Player;
 	onMove: boolean;
-}>({ gameValues: null, dispatch: () => {}, currentPlayer: initialPlayerOneStats, onMove: false });
+	isDebouncing: boolean;
+	player_id: string | null
+}>({ gameValues: null, dispatch: () => {}, currentPlayer: initialPlayerOneStats, onMove: false, isDebouncing: false, player_id: null });
 
 // Create a provider wrapper component
 export const GameProvider = ({
@@ -37,6 +40,7 @@ export const GameProvider = ({
 	player_id,
 }: GameProviderProps) => {
 	const [gameValues, dispatch] = useReducer(gameReducer, session_values);
+	const [isDebouncing, setIsDebouncing] = useState<boolean>(false)
 
 	useEffect(() => {
 		dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload: session_values });
@@ -44,16 +48,18 @@ export const GameProvider = ({
 
 	const debouncedUpdateFirestore = useCallback(
 		debounce(async (gameId: string, gameValues: GameType) => {
-			await setDoc(doc(db, "sessions", gameId as string), gameValues);
+		  setIsDebouncing(false);
+		  await setDoc(doc(db, "sessions", gameId as string), gameValues);
 		}, 300),
-		[] // dependencies array is empty so this function is only created once
-	);
-
+		[]
+	  );
+	  
 	useEffect(() => {
-		if (game_id) {
+		if (game_id && !isDebouncing) {
+			setIsDebouncing(true)
 			debouncedUpdateFirestore(game_id, gameValues);
 		}
-	}, [game_id, gameValues, debouncedUpdateFirestore]);
+	}, [game_id, gameValues]);
 
 	const currentPlayer = useMemo(
 		() =>
@@ -62,10 +68,10 @@ export const GameProvider = ({
 				: gameValues.player_two,
 		[gameValues.playerTurn]
 	);
-
 	const onMove = currentPlayer?.id === player_id;
+
 	return (
-		<GameContext.Provider value={{ gameValues, dispatch, currentPlayer, onMove }}>
+		<GameContext.Provider value={{ gameValues, dispatch, currentPlayer, onMove, isDebouncing, player_id }}>
 			{children}
 		</GameContext.Provider>
 	);

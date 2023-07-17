@@ -2,11 +2,11 @@ import { BottomLayer, BottomLayerKeys, Die, GameStats, Layer, Player, PossibleSc
 import { nanoid } from "nanoid";
 
 const isUpperLayerKey = (key: ScoreKeys): key is UpperLayerKeys => {
-	return ['one_er', 'two_er', 'three_er', 'for_er', 'five_er', 'six_er'].includes(key);
+	return ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes'].includes(key);
 };
 
 const isBottomLayerKey = (key: ScoreKeys): key is BottomLayerKeys => {
-	return ['dreier_pasch', 'vierer_pasch', 'kleine', 'grobe', 'full_house', 'kniffel', 'chance'].includes(key);
+	return ['threes_of_kind', 'fours_of_kind', 'small_straight', 'large_straight', 'full_house', 'yahtzee', 'chance'].includes(key);
 };
 
 export const hasAtLeastNOfAKind = (n: number, counts: { [key: number]: number }): boolean => {
@@ -99,20 +99,20 @@ export const calculatePossibleScores = (dice: Die[]) => {
 	// const values = Object.keys(counts).map(Number);
 
 	const upper_layer = {
-		one_er: counts[1] * 1 || 0,
-		two_er: counts[2] * 2 || 0,
-		three_er: counts[3] * 3 || 0,
-		for_er: counts[4] * 4 || 0,
-		five_er: counts[5] * 5 || 0,
-		six_er: counts[6] * 6 || 0,
+		aces: counts[1] * 1 || 0,
+		twos: counts[2] * 2 || 0,
+		threes: counts[3] * 3 || 0,
+		fours: counts[4] * 4 || 0,
+		fives: counts[5] * 5 || 0,
+		sixes: counts[6] * 6 || 0,
 	};
 	const bottom_layer = {
-		dreier_pasch: hasAtLeastNOfAKind(3, counts) ? sumAllDice(dice) : 0,
-		vierer_pasch: hasAtLeastNOfAKind(4, counts) ? sumAllDice(dice) : 0,
-		kleine: isSmallStraight(counts) ? 30 : 0,
-		grobe: isLargeStraight(counts) ? 40 : 0,
+		threes_of_kind: hasAtLeastNOfAKind(3, counts) ? sumAllDice(dice) : 0,
+		fours_of_kind: hasAtLeastNOfAKind(4, counts) ? sumAllDice(dice) : 0,
+		small_straight: isSmallStraight(counts) ? 30 : 0,
+		large_straight: isLargeStraight(counts) ? 40 : 0,
 		full_house: isFullHouse(counts) ? 25 : 0,
-		kniffel: hasAtLeastNOfAKind(5, counts) ? 50 : 0,
+		yahtzee: hasAtLeastNOfAKind(5, counts) ? 50 : 0,
 		chance: sumAllDice(dice),
 	};
 

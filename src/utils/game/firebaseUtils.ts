@@ -8,7 +8,7 @@ export const createNewGame = async () => {
     try {
     const referenceID = nanoid()
     await setDoc(doc(db, "sessions", referenceID), {...initialGameValues, id: referenceID})
-    const gameURL = `${window.location.origin}/${referenceID}`; 
+    const gameURL = `${window.location.origin}/play/${referenceID}`; 
     return gameURL;
     }
     catch (e) {

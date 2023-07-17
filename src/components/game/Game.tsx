@@ -1,38 +1,69 @@
-import React, { FC, ReactNode, useEffect } from "react";
+import React, { FC, ReactNode, useEffect, useMemo } from "react";
 import GameLayout from "./layouts/GameLayout";
 import Board from "./Board";
-import { Button, CircularProgress} from "@mui/material";
+import { Alert, Button, CircularProgress, LinearProgress } from "@mui/material";
 import StatsBar from "./gameStats/StatsBar";
 import { ActionTypes } from "@/utils/game/gameReducer";
 import { useGameContext } from "@/context/game/GameContext";
 import { GameState } from "@/types/game/types";
 import classNames from "classnames";
 import GameCreateLayout from "./layouts/GameCreateLayout";
+import useMobileWidth from "@/hooks/useMobile";
+import { useRouter } from "next/router";
 
 interface GameMainLayoutProps {
 	children: ReactNode;
 }
 
 const GameMainLayout: FC<GameMainLayoutProps> = ({ children }) => {
-	
+	const { onMove, gameValues, player_id, isDebouncing } = useGameContext();
+	const { push } = useRouter();
+	if (!gameValues) return null;
+
+	const { gameState, player_one, player_two } = gameValues;
+
+	const asPlayer = useMemo(() => {
+		if (player_one?.id === player_id) return player_one.name;
+		else if (player_two?.id === player_id) return player_two.name;
+		else return "Spectator";
+	}, [player_id, player_one?.id, player_two?.id]);
+
 	return (
-		<div
-			className={classNames(
-				"flex justify-between items-start gap-5 w-[1024px] border-secondary/50 overflow-x-auto transform duration-500 ease-in-out  border p-10 bg-neutral-dark rounded-md"
-			)}
-		>
-			{children}
+		<div className="flex flex-col gap-2">
+			<div className="flex justify-between items-center">
+				<p>
+					Connected as <span className="text-primary-gold">{asPlayer}</span>
+				</p>
+				{gameState === GameState.FINISHED && (
+					<Button onClick={() => push("/")} variant="outlined" sx={{ textTransform: "initial" }}>
+						Create a new game
+					</Button>
+				)}
+			</div>
+			<div className="h-2">
+			{gameState === GameState.IN_PROGRESS && isDebouncing && (
+					<LinearProgress color="secondary" />
+				)}
+			</div>
+			<div
+				className={classNames(
+					"flex justify-between items-start gap-5 w-full  transform duration-500 ease-in-out mx-auto border p-10 bg-neutral-dark rounded-md",
+					onMove ? gameState !== GameState.FINISHED && "border-primary-gold" : "border-secondary/50"
+				)}
+			>
+				{children}
+			</div>
 		</div>
 	);
 };
 
 const Game: FC = () => {
-	const { gameValues, dispatch, currentPlayer, onMove } = useGameContext();
+	const { gameValues, dispatch, currentPlayer, onMove, isDebouncing } = useGameContext();
+	const { isMobile } = useMobileWidth();
 
-	if (!gameValues) return null
+	if (!gameValues) return null;
 
 	const { gameState, rollsLeft } = gameValues;
-	
 
 	useEffect(() => {
 		if (
@@ -43,6 +74,17 @@ const Game: FC = () => {
 			dispatch({ type: ActionTypes.CALCULATE_SCORE });
 		}
 	}, [gameState]);
+
+	if (isMobile) {
+		return (
+			<GameCreateLayout>
+				<Alert sx={{ m: 2, p: 4 }} severity="error">
+					Sorry, I am to lazy to make it for mobile.{" "}
+					<span className="font-bold">Please, switch for 1024px and more window screen size.</span>
+				</Alert>
+			</GameCreateLayout>
+		);
+	}
 
 	if (gameState === GameState.NOT_STARTED) {
 		return (
@@ -64,7 +106,7 @@ const Game: FC = () => {
 							variant="outlined"
 							color="primary"
 							size="large"
-							disabled={!gameValues.rollsLeft || !onMove}
+							disabled={!gameValues.rollsLeft || !onMove || isDebouncing}
 						>
 							Roll dices
 						</Button>

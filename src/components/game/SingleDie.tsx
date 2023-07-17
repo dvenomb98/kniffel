@@ -9,15 +9,12 @@ interface SingleDieProps {
 }
 
 const SingleDie: FC<SingleDieProps> = ({ die, holdDie }) => {
-	const { gameValues, onMove } = useGameContext();
+	const { gameValues, onMove, isDebouncing } = useGameContext();
 	const [animate, setAnimate] = useState<boolean>(false);
 
-	if(!gameValues) return null
+	if (!gameValues) return null;
 
-	
 	const { value, isHeld } = die;
-
-
 
 	const shouldChangeBorder = isHeld || !gameValues.rollsLeft;
 
@@ -35,7 +32,7 @@ const SingleDie: FC<SingleDieProps> = ({ die, holdDie }) => {
 				"w-32 aspect-square border-2 rounded-md flex items-center justify-center bg-secondary-dark",
 				shouldChangeBorder ? "border-primary-gold-light" : "border-neutral-dark"
 			)}
-			disabled={!onMove}
+			disabled={!onMove || isDebouncing}
 		>
 			<p
 				className={classNames(

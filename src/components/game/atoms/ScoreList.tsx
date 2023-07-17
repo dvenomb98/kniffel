@@ -10,6 +10,7 @@ import {
 import { ActionTypes } from "@/utils/game/gameReducer";
 import { canAddScore } from "@/utils/game/gameUtils";
 import classNames from "classnames";
+import { add } from "husky";
 import React, { FC, useMemo } from "react";
 
 interface ScoreListProps {
@@ -23,9 +24,8 @@ interface ScoreListProps {
 const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, currentPlayer }) => {
 	const { gameValues, dispatch, onMove } = useGameContext();
 
-	if(!gameValues) return null
+	if (!gameValues) return null;
 
-	
 	const { possibleScores, rollsLeft } = gameValues;
 	const isCancelled = value === "canceled";
 
@@ -58,18 +58,14 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
 		<button
 			role="button"
 			onClick={handleAddScore}
-			disabled={((!canCancelScore || !addScore) && !onMove)}
-			
+			disabled={!onMove || !!value}
 			className={classNames(
-				"flex items-center gap-2 justify-between border p-2 transition-all ease-in-out bg-neutral-dark rounded-md ",
+				"flex items-center gap-2 justify-between border p-2 transition-all ease-in-out bg-neutral-dark rounded-md",
 				addScore
-					? "text-primary-gold-light opacity-100 border-primary-gold-light border-solid hover:border-primary-gold"
+					? "text-primary-gold-light opacity-100 border-primary-gold-light border-solid hover:border-primary-gold cursor-pointer"
 					: canCancelScore
-					? "border-primary-error-light hover:border-primary-error"
+					? "border-primary-error-light hover:border-primary-error cursor-pointer"
 					: "border-secondary border-dashed opacity-70",
-					
-
-			
 			)}
 		>
 			<span className="flex items-center gap-2">

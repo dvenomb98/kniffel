@@ -12,7 +12,7 @@ interface StatsBarProps {
 const StatsBar: FC<StatsBarProps> = ({ currentPlayer }) => {
 	const { gameValues } = useGameContext();
 
-	if(!gameValues) return null
+	if (!gameValues) return null;
 
 	const isWinner = gameValues?.winner === currentPlayer.order;
 	const gameEnded = gameValues.gameState === GameState.FINISHED;
@@ -20,13 +20,14 @@ const StatsBar: FC<StatsBarProps> = ({ currentPlayer }) => {
 	return (
 		<div
 			className={classNames(
-				"flex flex-col gap-2 basis-1/4 p-8 border justify-between rounded-md",
-				isWinner ? "border-primary-gold border-solid" : "border-secondary border-dashed"
+				"flex flex-col gap-2 p-8 border justify-between rounded-md",
+				isWinner ? "border-primary-gold border-solid" : "border-secondary border-dashed",
+				gameEnded ? "basis-1/2" : "w-[400px]"
 			)}
 		>
 			<div className="font-light flex">
 				<p className="flex gap-2">
-					{currentPlayer.name}
+					On turn: <span className="text-primary-gold">{currentPlayer.name}</span>
 				</p>
 			</div>
 			{!!gameEnded && !!currentPlayer.final_score && (

@@ -16,28 +16,28 @@ export type PossibleValue = number | "canceled"
 export type PossibleScore = typeof initialScore
 
 
-export type UpperLayerKeys = "one_er" | "two_er" | "three_er" | "for_er" | "five_er" | "six_er" 
-export type BottomLayerKeys = "dreier_pasch" | "vierer_pasch" | "kleine" | "grobe" | "full_house" | "kniffel" | "chance"
+export type UpperLayerKeys = "aces" | "twos" | "threes" | "fours" | "fives" | "sixes" 
+export type BottomLayerKeys = "threes_of_kind" | "fours_of_kind" | "small_straight" | "large_straight" | "full_house" | "yahtzee" | "chance"
 export type ScoreKeys = UpperLayerKeys | BottomLayerKeys;
 export type Layer = "upper_layer" | "bottom_layer"
 
 
 export interface UpperLayer {
-    one_er: PossibleValue
-    two_er: PossibleValue
-    three_er: PossibleValue
-    for_er: PossibleValue
-    five_er: PossibleValue
-    six_er: PossibleValue
+    aces: PossibleValue
+    twos: PossibleValue
+    threes: PossibleValue
+    fours: PossibleValue
+    fives: PossibleValue
+    sixes: PossibleValue
 }
 
 export interface BottomLayer {
-    dreier_pasch: PossibleValue
-    vierer_pasch: PossibleValue
-    kleine: PossibleValue
-    grobe: PossibleValue
+    threes_of_kind: PossibleValue
+    fours_of_kind: PossibleValue
+    small_straight: PossibleValue
+    large_straight: PossibleValue
     full_house: PossibleValue
-    kniffel: PossibleValue
+    yahtzee: PossibleValue
     chance: PossibleValue
 }
 

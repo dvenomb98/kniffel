@@ -1,14 +1,15 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db } from "../../../firebase";
 import { GameState, GameType } from "@/types/game/types";
 import { GameProvider } from "@/context/game/GameContext";
 import Game from "@/components/game/Game";
 import PageLayout from "@/components/layouts/PageLayout";
 import { nanoid } from "nanoid";
+import { NextPage } from "next";
 
-const GamePage = () => {
+const GamePage: NextPage = () => {
 	const router = useRouter();
 	const { gameId } = router.query;
 	const [playerId, setPlayerId] = useState<string | null>(null);
@@ -58,12 +59,10 @@ const GamePage = () => {
 	return (
 		<PageLayout>
 			<>
-				{game ? (
+				{game && (
 					<GameProvider session_values={game} game_id={gameId as string} player_id={playerId}>
 						<Game />
 					</GameProvider>
-				) : (
-					<div>Game not found</div>
 				)}
 			</>
 		</PageLayout>
