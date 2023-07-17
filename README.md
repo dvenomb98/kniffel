@@ -4,6 +4,10 @@
 ## Overview
 Yatzhee Online Game is a web-based implementation of the classic dice game, Yatzhee, built with NextJS. This is a multiplayer game where players can compete against their friends in real time.
 
+
+## How to play
+- Create a game and navigate to provided link and send a link to your friend. If you want to test it on your own computer, make sure you use two differents web browsers, otherwise it wouldnt work.
+
 ## Stack
 
 - NextJS
