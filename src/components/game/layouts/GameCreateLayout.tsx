@@ -1,15 +1,15 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode } from 'react';
 
 interface GameCreateLayoutProps {
-    children: ReactNode
+  children: ReactNode;
 }
 
-const GameCreateLayout: FC<GameCreateLayoutProps> = ({children}) => {
+const GameCreateLayout: FC<GameCreateLayoutProps> = ({ children }) => {
   return (
     <div className="w-full h-[800px] flex items-center justify-center border-dashed border border-secondary/50">
-        {children}
+      {children}
     </div>
-  )
-}
+  );
+};
 
-export default GameCreateLayout
+export default GameCreateLayout;

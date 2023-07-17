@@ -1,6 +1,6 @@
 import { Drawer, DrawerProps } from '@mui/material';
 import React, { FC } from 'react';
-import THEME from "../../themes/mui"
+import THEME from '../../themes/mui';
 
 interface CustomDrawerProps extends DrawerProps {
   isOpen: boolean;
