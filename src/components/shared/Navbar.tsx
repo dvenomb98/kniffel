@@ -9,7 +9,6 @@ const Navbar: FC = () => {
 				<h1 className="font-light">Yahtzee</h1>
 				</div>
 				
-				
 			</Container>
 		</nav>
 	);
