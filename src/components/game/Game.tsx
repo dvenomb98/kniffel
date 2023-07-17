@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useMemo } from 'react';
+import React, { FC, ReactNode, useMemo } from 'react';
 import GameLayout from './layouts/GameLayout';
 import Board from './Board';
 import { Alert, Button, CircularProgress, LinearProgress } from '@mui/material';
@@ -64,19 +64,9 @@ const Game: FC = () => {
   const { gameValues, dispatch, currentPlayer, onMove, isDebouncing } = useGameContext();
   const { isMobile } = useMobileWidth();
 
-  useEffect(() => {
-    if (
-      gameValues?.gameState === GameState.FINISHED &&
-      !gameValues.player_one.final_score &&
-      !gameValues.player_two.final_score
-    ) {
-      dispatch({ type: ActionTypes.CALCULATE_SCORE });
-    }
-  }, [gameValues?.gameState]);
-
   if (!gameValues) return null;
 
-  const { gameState, rollsLeft } = gameValues;
+  const { gameState, rollsLeft, round } = gameValues;
 
   if (isMobile) {
     return (
@@ -115,6 +105,9 @@ const Game: FC = () => {
             </Button>
             <p className="text-primary-gray">
               Rolls left: <span className="text-secondary-light">{rollsLeft}</span>
+            </p>
+            <p className="text-primary-gray">
+              Round: <span className="text-secondary-light">{round}/26</span>
             </p>
           </div>
           <Board />

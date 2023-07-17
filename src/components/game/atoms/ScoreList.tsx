@@ -63,7 +63,7 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
       onClick={handleAddScore}
       disabled={!onMove || !!value}
       className={classNames(
-        'flex items-center gap-2 justify-between border p-2 transition-all ease-in-out bg-neutral-dark rounded-md',
+        'flex items-center gap-2 justify-between border p-2 transition-all ease-in-out bg-neutral-dark rounded-md disabled:cursor-default',
         addScore
           ? 'text-primary-gold-light opacity-100 border-primary-gold-light border-solid hover:border-primary-gold cursor-pointer'
           : canCancelScore

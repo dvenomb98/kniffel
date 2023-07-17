@@ -1,5 +1,5 @@
 import { initialPlayerOneStats } from '@/config/game/config';
-import { GameType, Player, PlayerTurn } from '@/types/game/types';
+import { GameState, GameType, Player, PlayerTurn } from '@/types/game/types';
 import { Action, ActionTypes, gameReducer } from '@/utils/game/gameReducer';
 import { doc, setDoc } from 'firebase/firestore';
 import debounce from 'lodash.debounce';
@@ -52,6 +52,16 @@ export const GameProvider = ({
   useEffect(() => {
     dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload: session_values });
   }, [session_values]);
+
+  useEffect(() => {
+    if (
+      gameValues?.gameState === GameState.FINISHED &&
+      !gameValues.player_one.final_score &&
+      !gameValues.player_two.final_score
+    ) {
+      dispatch({ type: ActionTypes.CALCULATE_SCORE });
+    }
+  }, [gameValues]);
 
   const debouncedUpdateFirestore = useCallback(
     debounce(async (gameId: string, gameValues: GameType) => {
