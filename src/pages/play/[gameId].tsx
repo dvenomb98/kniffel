@@ -22,10 +22,10 @@ const GamePage: NextPage = () => {
       const newID = nanoid();
       localStorage.setItem('playerId', newID);
       setPlayerId(newID);
+    } else {
+      setPlayerId(playerId_localed);
     }
-
-    setPlayerId(playerId_localed);
-  }, [playerId]);
+  }, []); // Empty dependency array
 
   useEffect(() => {
     if (!gameId || !playerId) return; // gameId might be undefined for a moment
